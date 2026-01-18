@@ -1,28 +1,28 @@
 services:
   # PHP / Laravel アプリケーション
-  authenticate:
+  app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./docker/Dockerfile
     image: laravel-app
     container_name: laravel-app
     restart: unless-stopped
     working_dir: /var/www
     volumes:
-      - ./authenticate:/var/www
+      - ./app:/var/www
     networks:
       - laravel-network
 
   # Nginx ウェブサーバー
-  authenticate-anginx:
+  app-anginx:
     image: nginx:alpine
     container_name: laravel-web
     restart: unless-stopped
     ports:
       - "8080:80"
     volumes:
-      - ./authenticate:/var/www
-      - ./docker-compose/nginx:/etc/nginx/conf.d/
+      - ./app:/var/www
+      - ./docker/nginx:/etc/nginx/conf.d/
     networks:
       - laravel-network
 
