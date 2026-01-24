@@ -2,6 +2,7 @@
 
 namespace Modules\Authenticate\Packages\Application\UseCases;
 
+use Exception;
 use Modules\Authenticate\Packages\Domain\Models\ValueObjects\Email;
 use Modules\Authenticate\Packages\Domain\Models\Entities\PendingEmailVerification;
 use Modules\Authenticate\Packages\Domain\Repositories\PendingEmailVerificationRepository;
@@ -29,6 +30,8 @@ class RequestEmailVerificationUseCase
         $this->pendingEmailVerificationRepository->save($pendingVerification);
 
         // Send verification email
-        $this->emailVerificationMailer->send($email, $pendingVerification);
+        if ($this->emailVerificationMailer->send($email, $pendingVerification)) {
+            throw new Exception("メール送信失敗");
+        }
     }
 }
