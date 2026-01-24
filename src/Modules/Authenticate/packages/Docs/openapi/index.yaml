@@ -1,0 +1,23 @@
+openapi: 3.0.0
+info:
+  title: Authenticate Module API
+  version: 1.0.0
+  description: API documentation for the Authenticate module.
+servers:
+  - url: http://localhost/api/authenticate
+    description: Local development server
+paths: {}
+components:
+  schemas: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+tags:
+  - name: Authentication
+    description: User authentication and registration
+  - name: Authorization
+    description: User roles and permissions

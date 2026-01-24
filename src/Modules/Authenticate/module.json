@@ -1,0 +1,11 @@
+{
+    "name": "Authenticate",
+    "alias": "authenticate",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Authenticate\\Providers\\AuthenticateServiceProvider"
+    ],
+    "files": []
+}

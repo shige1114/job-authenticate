@@ -9,36 +9,58 @@
 
 ## 2. ディレクトリ構成定義
 
+
 ```text
 /
-├── modules/
-│   ├── Orchestrator/              # モジュール間のワークフロー・調整役
-│   │   ├── Application/           # 複数モジュールの Service を組み合わせたユースケース
-│   │   └── Presentation/          # 複合的な処理のエンドポイント (Controller等)
-│   │
-│   ├── {DomainName}/              # ビジネス領域 (例: Sales, Logistics)
-│   │   └── {ContextName}/         # 境界づけられたコンテキスト (例: Ordering, Inventory)
-│   │       ├── Docs/              # ★ コンテキスト固有のドキュメント
-│   │       │   ├── openapi/       # API定義 (YAML/JSON)
-│   │       │   └── language/      # ユビキタス言語（用語集）
+├── Modules/
+│   │   └── {ContextName}/
+│   │       ├── database/           # [Framework固有]
+│   │       │   ├── migrations/     # テーブル定義 (sales_ordering_orders 等)
+│   │       │   ├── seeders/        # 初期データ・マスタ
+│   │       │   └── factories/      # EloquentModel用ファクトリ
 │   │       │
-│   │       ├── Domain/            # ★ ビジネスロジックの本質
-│   │       │   ├── Models/        # Entity, ValueObject
-│   │       │   ├── Services/      # Domain Services
-│   │       │   ├── Repositories/  # Repository Interfaces（保存・取得の定義）
-│   │       │   ├── Events/        # Domain Events
-│   │       │   └── Exceptions/    # Domain Exceptions
+│   │       ├── routes/             # [Framework固有]
+│   │       │   └── api.php         # パッケージの Presentation層へルーティング
 │   │       │
-│   │       ├── Application/       # ApplicationService (Orchestratorからの呼出窓口)
-│   │       ├── Presentation/      # コンテキスト単体で完結する機能のエンドポイント
-│   │       └── Tests/             # コンテキスト内のテスト (Unit, Integration)
+│   │       └── packages/           # [ビジネスコア資産: DDD構成]
+│   │           ├── README.md       # ユビキタス言語
+│   │           ├── Docs/           # 仕様・設計資産
+│   │           │   ├── openapi/    # API定義 (index.yaml, schemas/, paths/)
+│   │           │   └── adr/        # アーキテクチャ決定記録
+│   │           │
+│   │           ├── Domain/         # ビジネスルール (Framework依存 0%)
+│   │           │   ├── Models/     # Entities (ID識別) / ValueObjects (不変値)
+│   │           │   │   ├── Entities/     # Entities (ID識別)
+│   │           │   │   └── ValueObjects/     #  ValueObjects (不変値)
+│   │           │   ├── Services/   # 複数モデルに跨るロジック
+│   │           │   ├── Repositories/ # I/Oの抽象 (Interfaceのみ)
+│   │           │   ├── Events/     # 発生した事象
+│   │           │   ├── Exceptions/ # 業務例外
+│   │           │   └── Factory/    # 複雑なEntity生成
+│   │           │
+│   │           ├── Application/    # ユースケース (進行役)
+│   │           │   ├── UseCases/   # 実行単位 (Serviceクラス)
+│   │           │   ├── DTOs/       # 入出力データの構造体
+│   │           │   └── Subscribers/# Domain Event ハンドラ
+│   │           │
+│   │           ├── Infrastructure/ # Framework / Library への依存
+│   │           │   ├── Persistence/ # Eloquent実装 / Repositories具体実装
+│   │           │   ├── ExternalServices/ # 外部APIクライアント
+│   │           │   ├── Messaging/  # EventBus / Queue実装
+│   │           │   └── Providers/  # ★ Package専用の ServiceProvider
+│   │           │
+│   │           ├── Presentation/   # 外部インターフェース
+│   │           │   ├── Controllers/# Application層への委譲
+│   │           │   ├── Requests/   # Laravel FormRequest
+│   │           │   ├── Resources/  # Laravel API Resource
+│   │           │   └── Middlewares/# 固有ミドルウェア
+│   │           │
+│   │           └── Tests/          # テストコード
+│   │               ├── Unit/       # Domain/Application単体テスト
+│   │               └── Factories/  # Domain Model用ファクトリ
 │   │
-│   └── Shared/                    # 全モジュール共通のインターフェースや定数
+│   ├── Shared/                     # 共通基底クラス、定数
+│   └── Orchestrator/               # コンテキスト間のワークフロー調整
 │
-├── infrastructure/                # 技術的実装の詳細（モジュールの外側に配置）
-│   ├── Persistence/               # Eloquentモデルの実体、Repositoryの具象実装
-│   ├── Messaging/                 # EventBus, Queue, Notificationの実装
-│   ├── ExternalServices/          # 決済、配送業者等の外部APIクライアント
-│   └── Shared/                    # 共通インフラ基盤
-│
-└── app/                           # Laravel標準基盤（Shared Kernel・共通基盤のみ）
+├── infrastructure/                 # 全体共通Framework設定 (Auth/Logging)
+└── app/                            # Provider登録用の外殻
