@@ -31,7 +31,7 @@
 │   │           ├── Domain/         # ビジネスルール (Framework依存 0%)
 │   │           │   ├── Models/     # Entities (ID識別) / ValueObjects (不変値)
 │   │           │   │   ├── Entities/     # Entities (ID識別)
-│   │           │   │   └── ValueObjects/     #  ValueObjects (不変値)
+│   │           │   │   └── ValueObjects/ #  ValueObjects (不変値)
 │   │           │   ├── Services/   # 複数モデルに跨るロジック
 │   │           │   ├── Repositories/ # I/Oの抽象 (Interfaceのみ)
 │   │           │   ├── Events/     # 発生した事象

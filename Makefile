@@ -1,6 +1,6 @@
 # Define Docker Compose file
 COMPOSE_FILE = docker/docker-compose.yaml
-
+DOCKER_EXEC = docker compose -f $(COMPOSE_FILE) exec app
 # Build Docker images
 build:
 	docker compose -f $(COMPOSE_FILE) build
@@ -23,6 +23,9 @@ logs:
 
 # Execute a shell command in the app container
 shell:
-	docker compose -f $(COMPOSE_FILE) exec app bash
+	$(DOCKER_EXEC) bash
+
+test:
+	$(DOCKER_EXEC) ./vendor/bin/phpunit --testdox
 
 .PHONY: build up down ps logs shell

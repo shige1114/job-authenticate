@@ -19,12 +19,13 @@
         "psr-4": {
             "Modules\\Authenticate\\": "app/",
             "Modules\\Authenticate\\Database\\Factories\\": "database/factories/",
-            "Modules\\Authenticate\\Database\\Seeders\\": "database/seeders/"
+            "Modules\\Authenticate\\Database\\Seeders\\": "database/seeders/",
+            "Modules\\Authenticate\\Packages\\": "packages/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Modules\\Authenticate\\Tests\\": "tests/"
+            "Modules\\Authenticate\\Packages\\Tests\\": "packages/tests/"
         }
     }
 }
