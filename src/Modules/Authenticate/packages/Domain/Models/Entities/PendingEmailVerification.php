@@ -38,6 +38,10 @@ class PendingEmailVerification
     {
         return $this->email;
     }
+    public function getExpiresAt(): DateTimeImmutable
+    {
+        return $this->expiresAt;
+    }
 
     public function isValid(): bool
     {

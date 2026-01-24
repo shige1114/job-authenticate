@@ -21,8 +21,8 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./app:/var/www
-      - ./docker/nginx:/etc/nginx/conf.d/
+      - ../src:/var/www
+      - ./nginx:/etc/nginx/conf.d/
     networks:
       - laravel-network
 
@@ -31,18 +31,33 @@ services:
     image: mysql:8.0
     container_name: laravel-db
     restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
+    env_file:
+      - .env.docker
     ports:
       - "3306:3306"
     volumes:
       - dbdata:/var/lib/mysql
     networks:
       - laravel-network
+  mailpit:
+    image: 'axllent/mailpit:latest'
+    container_name: laravel-mailpit
+    ports:
+      - '1025:1025' # SMTP サーバー用
+      - '8025:8025' # Web UI 確認用 (http://localhost:8025)
+    networks:
+      - laravel-network
 
+  redis:
+    image: redis:alpine
+    container_name: laravel-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel-network
+    volumes:
+      - redisdata:/data
 networks:
   laravel-network:
     driver: bridge
@@ -50,3 +65,6 @@ networks:
 volumes:
   dbdata:
     driver: local
+  redisdata:
+    driver: local
+

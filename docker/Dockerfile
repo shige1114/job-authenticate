@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
 
 # PHP拡張のインストール
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
+RUN pecl install redis && docker-php-ext-enable redis
 # Composerのインストール（マルチステージビルドを利用）
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 

@@ -4,6 +4,7 @@ namespace Modules\Authenticate\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Modules\Authenticate\Packages\Infrastructure\Providers\RepositoryServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -27,6 +28,7 @@ class AuthenticateServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->name, 'database/migrations'));
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'authenticate');
     }
 
     /**
@@ -36,6 +38,7 @@ class AuthenticateServiceProvider extends ServiceProvider
     {
         $this->app->register(EventServiceProvider::class);
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(RepositoryServiceProvider::class);
     }
 
     /**
