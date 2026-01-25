@@ -7,6 +7,18 @@ use Illuminate\Foundation\Http\FormRequest;
 class VerifyEmailRequest extends FormRequest
 {
     /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'token' => $this->header('X-Email-Verification-Token'),
+        ]);
+    }
+
+    /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
