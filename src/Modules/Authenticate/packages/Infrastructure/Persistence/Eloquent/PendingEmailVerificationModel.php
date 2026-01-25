@@ -14,10 +14,13 @@ class PendingEmailVerificationModel extends Model
     protected $fillable = [
         'token',
         'email',
+        'code',
         'expires_at',
+        'is_verified',
     ];
 
     protected $casts = [
         'expires_at' => 'datetime',
+        'is_verified' => 'boolean',
     ];
 }

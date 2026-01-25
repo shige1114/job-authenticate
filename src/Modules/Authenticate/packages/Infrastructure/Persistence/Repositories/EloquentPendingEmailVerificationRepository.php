@@ -16,7 +16,9 @@ class EloquentPendingEmailVerificationRepository implements PendingEmailVerifica
             ['token' => $pendingEmailVerification->getToken()],
             [
                 'email' => (string) $pendingEmailVerification->getEmail(),
+                'code' => $pendingEmailVerification->getCode(),
                 'expires_at' => $pendingEmailVerification->getExpiresAt(),
+                'is_verified' => $pendingEmailVerification->isVerified(),
             ]
         );
     }
@@ -32,7 +34,9 @@ class EloquentPendingEmailVerificationRepository implements PendingEmailVerifica
         return new PendingEmailVerification(
             $model->token,
             new Email($model->email),
-            new DateTimeImmutable($model->expires_at)
+            new DateTimeImmutable($model->expires_at),
+            $model->code,
+            $model->is_verified
         );
     }
 

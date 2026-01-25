@@ -24,5 +24,10 @@ class RepositoryServiceProvider extends ServiceProvider
             EmailVerificationMailer::class,
             SmtpEmailVerificationMailer::class
         );
+
+        $this->app->bind(
+            \Modules\Authenticate\Packages\Domain\Repositories\UserRepository::class,
+            \Modules\Authenticate\Packages\Packages\Infrastructure\Persistence\Repositories\EloquentUserRepository::class
+        );
     }
 }

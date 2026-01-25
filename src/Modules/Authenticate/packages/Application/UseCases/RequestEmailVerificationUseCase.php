@@ -21,17 +21,28 @@ class RequestEmailVerificationUseCase
         $this->emailVerificationMailer = $emailVerificationMailer;
     }
 
-    public function execute(string $emailString): void
+    public function execute(string $emailString): string
     {
         $email = new Email($emailString); // Validates email format
 
-        $pendingVerification = PendingEmailVerification::create($email);
+        $sixDigitCode = $this->generateSixDigitCode(); // Generate 6-digit code
+
+        $token = bin2hex(random_bytes(20));
+
+        $pendingVerification = PendingEmailVerification::create($token, $email, $sixDigitCode); // Pass code
 
         $this->pendingEmailVerificationRepository->save($pendingVerification);
 
         // Send verification email
-        if ($this->emailVerificationMailer->send($email, $pendingVerification)) {
+        if (!$this->emailVerificationMailer->send($email, $sixDigitCode)) { // Pass code directly
             throw new Exception("メール送信失敗");
         }
+
+        return $sixDigitCode; // Return the code
+    }
+
+    private function generateSixDigitCode(): string
+    {
+        return str_pad(random_int(100000, 999999), 6, '0', STR_PAD_LEFT);
     }
 }
