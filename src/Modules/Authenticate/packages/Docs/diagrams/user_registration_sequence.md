@@ -31,13 +31,9 @@ sequenceDiagram
         Application-->>Presentation: 検証エラー
         Presentation-->>User: エラーメッセージ表示
     else コード一致 and 期限内
-        Application->>Infrastructure: PendingEmailVerification削除
-        Infrastructure-->>Application: 削除完了
-        Application->>Domain: 仮Userエンティティ作成 (メール検証済み)
-        Application->>Infrastructure: 仮User保存
-        Infrastructure-->>Application: UserID
-        Application-->>Presentation: UserID / セッショントークン
-        Presentation-->>User: パスワード設定ページへリダイレクト (UserID/トークン付き)
+        Application->>Infrastructure: PendingEmailVerificationの認証
+        Infrastructure-->>Application: PendingEmailVerificationをアップデート
+        Presentation-->>User: パスワード設定ページへリダイレクト (トークン付き)
     end
 ```
 
