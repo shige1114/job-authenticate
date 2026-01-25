@@ -22,10 +22,13 @@ class RequestEmailVerificationController extends Controller
     public function __invoke(RequestEmailVerificationRequest $request, RequestEmailVerificationUseCase $useCase): JsonResponse
     {
         try {
-            $useCase->execute($request->validated()['email']);
+            $token = $useCase->execute($request->validated()['email']);
 
             return response()->json(
-                ['message' => 'A verification email has been sent.'],
+                [
+                    'message' => 'A verification email has been sent.',
+                    'token' => $token,
+                ],
                 Response::HTTP_OK
             );
         } catch (Throwable $e) {

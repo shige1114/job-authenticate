@@ -38,7 +38,7 @@ class RequestEmailVerificationUseCase
             throw new Exception("メール送信失敗");
         }
 
-        return $sixDigitCode; // Return the code
+        return $token; // Return the code
     }
 
     private function generateSixDigitCode(): string
