@@ -60,17 +60,18 @@ class PendingEmailVerification
 
     public function isVerified(): bool
     {
-        return $this->isVerified && !$this->isExpired();
-    }
-
-    private function markAsVerified(bool $result): void
-    {
-        $this->isVerified = $result;
+        return $this->isVerified;
     }
 
     public function verify(string $code): void
     {
-        $this->markAsVerified($this->code === $code && !$this->isExpired());
+        if ($this->isExpired()) {
+            throw new EmailVerificationFailedException("Email verification for token expired.");
+        }
+        if ($this->code !== $code) {
+            throw new EmailVerificationFailedException("Invalid code for pending email verification with token {$token}.");
+        }
+        $this->isVerified = true;
     }
 
     public function isExpired(): bool
